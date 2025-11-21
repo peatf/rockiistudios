@@ -701,7 +701,7 @@ export default function App() {
                                     <div className="hidden md:block col-span-1 font-mono text-[10px] text-[#2B2B2B]/50">{product.ref}</div>
                                     <div className="col-span-3 md:col-span-1 w-16 h-16 bg-[#EBEAE4] mix-blend-multiply"><img src={product.image} alt="" className="w-full h-full object-contain p-2"/></div>
                                     <div className="col-span-6 md:col-span-4">
-                                        <h3 className="font-serif text-xl italic">{product.name}</h3>
+                                        <h3 className="font-serif text-xl italic text-[#567fff]">{product.name}</h3>
                                         <p className="font-mono text-[10px] uppercase mt-1 text-[#2B2B2B]/60">{product.type}</p>
                                     </div>
                                     <div className="col-span-3 text-right font-mono text-sm">${product.price}</div>
@@ -732,7 +732,7 @@ export default function App() {
                                     </div>
 
                                     <div className="relative z-10">
-                                        <h3 className="font-serif text-3xl italic mb-1">{product.name}</h3>
+                                        <h3 className="font-serif text-3xl italic mb-1 text-[#567fff]">{product.name}</h3>
                                         <div className="flex justify-between items-end">
                                             <p className="font-mono text-[10px] uppercase text-[#2B2B2B]/60 max-w-[150px]">{product.type}</p>
                                             <button 
