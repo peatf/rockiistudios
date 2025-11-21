@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { X, Plus, Minus, Trash2, ArrowRight, Circle, MoveLeft } from 'lucide-react';
+import { X, Plus, Minus, Trash2, ArrowRight, Circle, MoveLeft, Menu } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 
 // --- ASSETS & DATA ---
@@ -118,6 +118,12 @@ const WORKSHOPS = [
   { date: "NOV 22", day: "Saturday", time: "12:00 — 14:00", seats: 4 },
   { date: "NOV 29", day: "Saturday", time: "12:00 — 14:00", seats: 2 },
   { date: "NOV 30", day: "Sunday", time: "12:00 — 14:00", seats: 0 } // Sold out
+];
+
+const NAV_LINKS = [
+  { key: 'catalogue', label: 'Catalogue', target: 'home' },
+  { key: 'workshops', label: 'Workshops', target: 'workshops' },
+  { key: 'journal', label: 'Journal', target: 'journal' },
 ];
 
 // --- UI COMPONENTS ---
@@ -528,6 +534,11 @@ export default function App() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [viewMode, setViewMode] = useState('grid'); // grid or list
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [activeSection]);
 
   const addToCart = (product) => {
     setCart([...cart, product]);
@@ -570,23 +581,32 @@ export default function App() {
       {activeSection !== 'builder' && <GridLines />}
 
       {/* --- HEADER --- */}
-      <nav className="fixed top-0 w-full z-40 border-b border-[#2B2B2B] bg-[#F2F0E9]/90 backdrop-blur-md">
+      <nav className="fixed top-0 w-full z-40 border-b border-[#2B2B2B] bg-[#F2F0E9]/90 backdrop-blur-md relative">
         <div className="relative h-14 md:h-16 w-full">
             {/* Left Container: Nav Links */}
-            <div className="absolute top-0 left-0 h-full flex items-center pl-6 md:pl-0">
+            <div className="absolute top-0 left-0 h-full flex items-center pl-4 md:pl-0">
                 {/* Use a container with border-r to simulate "holding" the left side */}
-                <div className="h-full border-r border-[#2B2B2B] flex items-center px-8 hidden md:flex">
-                    <div className="flex gap-8">
-                        {['catalogue', 'workshops', 'journal'].map(item => (
+                <div className="h-full border-r border-[#2B2B2B] flex items-center px-4 md:px-8">
+                    <div className="hidden md:flex gap-8">
+                        {NAV_LINKS.map((item) => (
                             <button 
-                                key={item}
-                                onClick={() => setActiveSection(item === 'catalogue' ? 'home' : item)}
-                                className={`font-mono text-[11px] uppercase tracking-widest hover:underline decoration-1 underline-offset-4 ${activeSection === item ? 'underline' : ''}`}
+                                key={item.key}
+                                onClick={() => setActiveSection(item.target)}
+                                className={`font-mono text-[11px] uppercase tracking-widest hover:underline decoration-1 underline-offset-4 ${activeSection === item.target ? 'underline' : ''}`}
                             >
-                                {item}
+                                {item.label}
                             </button>
                         ))}
                     </div>
+                    <button
+                        className="md:hidden flex items-center gap-2 font-mono text-[11px] uppercase tracking-widest hover:underline decoration-1 underline-offset-4"
+                        onClick={() => setIsMobileMenuOpen((open) => !open)}
+                        aria-expanded={isMobileMenuOpen}
+                        aria-label="Toggle navigation"
+                    >
+                        <Menu size={16} />
+                        Menu
+                    </button>
                 </div>
             </div>
 
@@ -609,7 +629,10 @@ export default function App() {
                 {/* Use a container with border-l to simulate "holding" the right side */}
                 <div className="h-full border-l border-[#2B2B2B] flex items-center px-8">
                     <button 
-                        onClick={() => setIsCartOpen(true)}
+                        onClick={() => {
+                            setIsCartOpen(true);
+                            setIsMobileMenuOpen(false);
+                        }}
                         className="flex items-center gap-3 hover:bg-[#2B2B2B] hover:text-[#F2F0E9] transition-colors h-full px-4 -mx-4"
                     >
                         <span className="font-mono text-[11px] uppercase tracking-widest hidden md:inline">Cart</span>
@@ -620,6 +643,32 @@ export default function App() {
                 </div>
             </div>
         </div>
+
+        {/* Mobile Nav */}
+        <AnimatePresence>
+          {isMobileMenuOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="md:hidden overflow-hidden border-b border-[#2B2B2B]"
+            >
+              <div className="bg-[#F2F0E9] divide-y divide-[#2B2B2B]">
+                {NAV_LINKS.map((item) => (
+                  <button
+                    key={item.key}
+                    onClick={() => setActiveSection(item.target)}
+                    className={`w-full text-left px-6 py-4 font-mono text-[11px] uppercase tracking-widest flex items-center justify-between hover:bg-[#EBEAE4] transition-colors ${activeSection === item.target ? 'bg-[#EBEAE4]' : ''}`}
+                  >
+                    {item.label}
+                    {activeSection === item.target && <Circle size={10} fill="#2B2B2B" strokeWidth={0} />}
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
 
       {/* --- MAIN CONTENT --- */}
@@ -643,7 +692,7 @@ export default function App() {
                             onClick={() => product.isCustomizable ? setActiveSection('builder') : addToCart(product)}
                             className={`
                                 bg-[#F2F0E9] group relative overflow-hidden cursor-pointer
-                                ${viewMode === 'grid' ? 'aspect-[4/5] flex flex-col justify-between p-6 border-b border-r border-[#2B2B2B] hover:invert transition-all duration-0' : 'flex md:grid md:grid-cols-12 items-center p-6 border-b border-[#2B2B2B] gap-6 hover:bg-white transition-colors'}
+                                ${viewMode === 'grid' ? 'aspect-[4/5] flex flex-col justify-between p-6 border-b border-r border-[#2B2B2B] transition-all duration-200 hover:bg-white' : 'flex md:grid md:grid-cols-12 items-center p-6 border-b border-[#2B2B2B] gap-6 hover:bg-white transition-colors'}
                             `}
                         >
                              {/* List View Columns */}
@@ -828,6 +877,9 @@ export default function App() {
       {/* Overlay for Cart */}
       {isCartOpen && (
         <div className="fixed inset-0 bg-[#2B2B2B]/20 backdrop-blur-sm z-[90]" onClick={() => setIsCartOpen(false)} />
+      )}
+      {isMobileMenuOpen && (
+        <div className="fixed inset-0 bg-transparent z-30 md:hidden" onClick={() => setIsMobileMenuOpen(false)} />
       )}
     </div>
   );
