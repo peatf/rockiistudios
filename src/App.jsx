@@ -398,7 +398,7 @@ const CustomBuilder = ({ onClose, onAddToCart }) => {
             </div>
 
             {/* RIGHT COLUMN: SPECS SIDEBAR */}
-            <div className="w-full md:w-80 lg:w-96 bg-[#F9F8F6] border-l border-[#2B2B2B] flex flex-col h-[40vh] md:h-auto shrink-0 shadow-xl md:shadow-none z-40">
+            <div className="w-full md:w-80 lg:w-96 bg-[#F9F8F6] border-l border-[#2B2B2B] flex flex-col min-h-[340px] md:min-h-0 md:max-h-[90vh] shrink-0 shadow-xl md:shadow-none z-40 md:sticky md:top-0">
                 <div className="p-6 md:p-8 border-b border-[#2B2B2B]/10 bg-[#F9F8F6]">
                     <h3 className="font-serif text-xl md:text-2xl italic mb-1">Manifest</h3>
                     <p className="font-mono text-[10px] text-[#2B2B2B]/60 uppercase tracking-wide">Configuration & Spec</p>
