@@ -152,7 +152,7 @@ const SectionHeader = ({ title, subtitle, count }) => (
     <div className="flex items-end justify-between border-b border-[#2B2B2B] pb-4 mb-8 md:mb-16 pt-8">
         <div className="flex flex-col gap-2">
             <span className="font-mono text-xs uppercase tracking-widest text-[#2B2B2B]/60">{subtitle}</span>
-            <h2 className="font-serif text-4xl md:text-6xl text-[#2B2B2B] leading-[0.9]">{title}</h2>
+            <h2 className="font-serif text-4xl md:text-6xl text-[#567fff] leading-[0.9]">{title}</h2>
         </div>
         {count && <span className="font-mono text-xs border border-[#2B2B2B] px-2 py-1 rounded-full">{count}</span>}
     </div>
