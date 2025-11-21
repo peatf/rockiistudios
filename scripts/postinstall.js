@@ -5,7 +5,11 @@ const isDarwinArm64 = process.platform === 'darwin' && process.arch === 'arm64';
 
 if (isDarwinArm64) {
   try {
-    execSync('npm install @rollup/rollup-darwin-arm64@4.53.3 --no-save', { stdio: 'inherit' });
+    // Avoid touching package-lock.json by disabling lock writes for this optional install.
+    execSync(
+      'npm install @rollup/rollup-darwin-arm64@4.53.3 --no-save --no-package-lock',
+      { stdio: 'inherit', env: { ...process.env, npm_config_package_lock: 'false' } }
+    );
   } catch (err) {
     console.warn('Optional rollup native binary failed to install:', err?.message || err);
   }
