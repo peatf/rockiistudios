@@ -37,24 +37,13 @@ body {
 .title-glow {
   position: relative;
   display: inline-block;
-  padding-bottom: 4px;
+  color: #567fff;
+  text-shadow:
+    0 2px 10px rgba(0, 0, 0, 0.25),
+    0 0 2px rgba(255, 255, 255, 0.65);
+  -webkit-text-stroke: 0.4px rgba(255, 255, 255, 0.45);
 }
 
 .title-glow::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(86,127,255,0.4) 50%, rgba(255,255,255,0) 100%);
-  box-shadow: 0 6px 12px rgba(86, 127, 255, 0.25);
-  opacity: 0.8;
-  transition: opacity 180ms ease, box-shadow 180ms ease;
-  pointer-events: none;
-}
-
-.title-glow:hover::after {
-  opacity: 1;
-  box-shadow: 0 8px 16px rgba(86, 127, 255, 0.28);
+  display: none;
 }
