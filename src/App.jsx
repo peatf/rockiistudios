@@ -772,7 +772,7 @@ export default function App() {
                                 Rockii Studios is a project by Raquel Navarro, working from her greenhouse studio in Los Angeles, CA.
                             </p>
                             <p>
-                                Each piece begins with a quiet attention to form—a study of the curves, textures, and irregularities found in nature. Raquel's work centers on handcrafted, one-of-a-kind jewelry that refuses to conform to mass-produced perfection.
+                                Each piece begins with a quiet attention to form, a study of the curves, textures, and irregularities found in nature. Raquel's work centers on handcrafted, one-of-a-kind jewelry that refuses to conform to mass-produced perfection.
                             </p>
                             <p>
                                 Using 925 silver clay, she captures fingerprints, dust, and the natural wobble of the hand. Each piece is fired in a kiln at 1600°F, transforming soft clay into solid silver. This process preserves every mark, every imperfection—a record of making.
