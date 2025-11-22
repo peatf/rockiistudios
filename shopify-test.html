@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rockii Builder - Shopify Test Harness</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f5f5;
+        }
+        .header {
+            background: #2B2B2B;
+            color: #F2F0E9;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        .header p {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        .controls {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .controls h2 {
+            margin-bottom: 16px;
+            font-size: 18px;
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        .control-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        button {
+            background: #2B2B2B;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        button:hover {
+            background: #3E3E3E;
+        }
+        button.secondary {
+            background: #E5E7E6;
+            color: #2B2B2B;
+        }
+        button.secondary:hover {
+            background: #D5D7D6;
+        }
+        .output {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .output h3 {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .output pre {
+            background: #f5f5f5;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+        #rockii-builder-root {
+            /* Builder will take full screen when mounted */
+        }
+        .button-group {
+            display: flex;
+            gap: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🔧 Rockii Builder - Shopify Test Harness</h1>
+        <p>Test the IIFE bundle before deploying to Shopify</p>
+    </div>
+
+    <div class="controls">
+        <h2>Configuration</h2>
+
+        <div class="control-group">
+            <label>Product ID</label>
+            <input type="text" id="productId" value="123456789" placeholder="Enter Shopify product ID">
+        </div>
+
+        <div class="button-group">
+            <button onclick="mountBuilder()">Launch Builder</button>
+            <button class="secondary" onclick="unmountBuilder()">Unmount Builder</button>
+        </div>
+    </div>
+
+    <div class="output">
+        <h3>Console Output</h3>
+        <pre id="console-output">Waiting for user action...</pre>
+    </div>
+
+    <!-- Mount point for the builder -->
+    <div id="rockii-builder-root"></div>
+
+    <!-- Load the IIFE bundle -->
+    <script src="./dist/rockii-builder.iife.js"></script>
+
+    <script>
+        let root = null;
+        let consoleOutput = [];
+
+        // Capture console logs
+        const originalLog = console.log;
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            consoleOutput.push('[LOG] ' + args.join(' '));
+            updateConsoleOutput();
+        };
+
+        const originalError = console.error;
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            consoleOutput.push('[ERROR] ' + args.join(' '));
+            updateConsoleOutput();
+        };
+
+        function updateConsoleOutput() {
+            const outputEl = document.getElementById('console-output');
+            outputEl.textContent = consoleOutput.slice(-10).join('\n') || 'No output yet';
+        }
+
+        function mountBuilder() {
+            const productId = document.getElementById('productId').value;
+            const el = document.getElementById('rockii-builder-root');
+
+            if (!window.RockiiBuilder) {
+                console.error('RockiiBuilder global not found! Make sure the IIFE bundle is loaded.');
+                alert('Error: RockiiBuilder not found. Did you build the Shopify bundle?');
+                return;
+            }
+
+            console.log('Mounting RockiiBuilder with productId:', productId);
+
+            // Mock product variants (in real Shopify, these would come from Liquid)
+            const mockProductVariants = [
+                { id: 1001, option1: '1', option2: 'Silver', price: 65 },
+                { id: 1002, option1: '2', option2: 'Silver', price: 105 },
+                { id: 1003, option1: '3', option2: 'Silver', price: 145 },
+                { id: 1004, option1: '4', option2: 'Silver', price: 185 },
+                { id: 1005, option1: '5', option2: 'Silver', price: 225 },
+                { id: 1006, option1: '6', option2: 'Silver', price: 245 },
+                { id: 1007, option1: '7', option2: 'Silver', price: 285 },
+                { id: 1008, option1: '8', option2: 'Silver', price: 325 },
+            ];
+
+            try {
+                root = window.RockiiBuilder.mount(el, {
+                    productId: productId,
+                    productVariants: mockProductVariants,
+                    onAddToCart: function(payload) {
+                        console.log('🛒 Add to Cart callback triggered!');
+                        console.log('Payload:', JSON.stringify(payload, null, 2));
+                        alert('Add to Cart triggered! Check console for payload.');
+                        unmountBuilder();
+                    },
+                    onClose: function() {
+                        console.log('❌ Builder closed by user');
+                        unmountBuilder();
+                    }
+                });
+                console.log('✅ RockiiBuilder mounted successfully');
+            } catch (error) {
+                console.error('Failed to mount builder:', error);
+                alert('Error mounting builder: ' + error.message);
+            }
+        }
+
+        function unmountBuilder() {
+            const el = document.getElementById('rockii-builder-root');
+            if (root) {
+                console.log('Unmounting RockiiBuilder...');
+                root.unmount();
+                root = null;
+                el.innerHTML = '';
+                console.log('✅ Builder unmounted');
+            } else {
+                console.log('No builder to unmount');
+            }
+        }
+
+        // Initial check
+        if (typeof window.RockiiBuilder === 'undefined') {
+            console.error('⚠️  RockiiBuilder not loaded! Run "npm run build:shopify" first.');
+            consoleOutput.push('⚠️  RockiiBuilder IIFE bundle not found!');
+            consoleOutput.push('Run: npm run build:shopify');
+            consoleOutput.push('Then open this file in a browser or use: npx serve .');
+            updateConsoleOutput();
+        } else {
+            console.log('✅ RockiiBuilder loaded successfully (v' + window.RockiiBuilder.version + ')');
+        }
+    </script>
+</body>
+</html>
