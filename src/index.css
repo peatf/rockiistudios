@@ -53,9 +53,9 @@ body {
   backdrop-filter: blur(8px) saturate(1.05);
   -webkit-backdrop-filter: blur(8px) saturate(1.05);
   text-shadow:
-    0 0 6px rgba(86, 127, 255, 0.5),
-    0 0 16px rgba(86, 127, 255, 0.55),
-    0 0 26px rgba(86, 127, 255, 0.35);
+    0 0 6px rgba(255, 255, 255, 0.6),
+    0 0 14px rgba(255, 255, 255, 0.4),
+    0 0 22px rgba(255, 255, 255, 0.28);
 }
 
 .title-glow::after {
