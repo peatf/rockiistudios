@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { X, Plus, Minus, Trash2, ArrowRight, Circle, MoveLeft, Menu } from 'lucide-react';
 import { motion, AnimatePresence, useMotionValue, useTransform, animate } from "framer-motion";
 
@@ -172,7 +172,7 @@ const BeadNode = ({ targetT, curveWidth, startY, data, isActive, onClick, onClea
             mass: 1.2
         });
         return controls.stop;
-    }, [targetT]);
+    }, [targetT, t]);
 
     const getPointOnCurve = (v) => {
         const P0 = { x: 0, y: startY };
@@ -223,7 +223,11 @@ const CustomBuilder = ({ onClose, onAddToCart }) => {
     const [chainLengthType, setChainLengthType] = useState('standard'); // 'standard' or 'custom'
     const [customLength, setCustomLength] = useState('20');
 
-    const generateId = () => Math.random().toString(36).substr(2, 9);
+    const idCounter = useRef(0);
+    const generateId = () => {
+        idCounter.current += 1;
+        return `bead-${idCounter.current}`;
+    };
 
     // Calculate dynamic price based on bead count
     const currentPrice = CUSTOM_PRICING[beadCount] || 105;
@@ -537,14 +541,15 @@ export default function App() {
   const [viewMode, setViewMode] = useState('grid'); // grid or list
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  useEffect(() => {
+  const changeSection = (section) => {
+    setActiveSection(section);
     setIsMobileMenuOpen(false);
-  }, [activeSection]);
+  };
 
   const addToCart = (product) => {
     setCart([...cart, product]);
     setIsCartOpen(true);
-    if (activeSection === 'builder') setActiveSection('home');
+    if (activeSection === 'builder') changeSection('home');
   };
 
   const removeFromCart = (index) => {
@@ -592,7 +597,7 @@ export default function App() {
                         {NAV_LINKS.map((item) => (
                             <button 
                                 key={item.key}
-                                onClick={() => setActiveSection(item.target)}
+                                onClick={() => changeSection(item.target)}
                                 className={`font-mono text-[11px] uppercase tracking-widest hover:underline decoration-1 underline-offset-4 ${activeSection === item.target ? 'underline' : ''}`}
                             >
                                 {item.label}
@@ -615,7 +620,7 @@ export default function App() {
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                 <button 
                     className="pointer-events-auto hover:opacity-50 transition-opacity duration-300"
-                    onClick={() => setActiveSection('home')}
+                    onClick={() => changeSection('home')}
                 >
                     <img 
                         src={IMAGES.logo} 
@@ -659,7 +664,7 @@ export default function App() {
                 {NAV_LINKS.map((item) => (
                   <button
                     key={item.key}
-                    onClick={() => setActiveSection(item.target)}
+                    onClick={() => changeSection(item.target)}
                     className={`w-full text-left px-6 py-4 font-mono text-[11px] uppercase tracking-widest flex items-center justify-between hover:bg-[#EBEAE4] transition-colors ${activeSection === item.target ? 'bg-[#EBEAE4]' : ''}`}
                   >
                     {item.label}
@@ -690,7 +695,7 @@ export default function App() {
                     {PRODUCTS.map((product) => (
                         <div 
                             key={product.id} 
-                            onClick={() => product.isCustomizable ? setActiveSection('builder') : addToCart(product)}
+                            onClick={() => product.isCustomizable ? changeSection('builder') : addToCart(product)}
                             className={`
                                 bg-[#F2F0E9] group relative overflow-hidden cursor-pointer
                                 ${viewMode === 'grid' ? 'aspect-[4/5] flex flex-col justify-between p-6 border-b border-r border-[#2B2B2B] transition-all duration-200 hover:bg-white' : 'flex md:grid md:grid-cols-12 items-center p-6 border-b border-[#2B2B2B] gap-6 hover:bg-white transition-colors'}
@@ -755,7 +760,7 @@ export default function App() {
         {/* --- BUILDER --- */}
         {activeSection === 'builder' && (
             <div className="fixed inset-0 z-50 bg-[#F2F0E9]">
-                <CustomBuilder onClose={() => setActiveSection('home')} onAddToCart={addToCart} />
+                <CustomBuilder onClose={() => changeSection('home')} onAddToCart={addToCart} />
             </div>
         )}
 
