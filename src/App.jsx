@@ -769,10 +769,16 @@ export default function App() {
                         </h1>
                         <div className="space-y-8 font-mono text-xs leading-loose max-w-md text-[#2B2B2B]/80">
                             <p className="uppercase tracking-widest border-l-2 border-[#2B2B2B] pl-4">
-                                Rockii Studios is a project by Raquel Navarro. Based in Los Angeles, CA.
+                                Rockii Studios is a project by Raquel Navarro, working from her greenhouse studio in Los Angeles, CA.
                             </p>
                             <p>
-                                Using 925 silver clay allows us to capture fingerprints, dust, and the natural wobble of the hand. Each piece is fired in a kiln at 1600°F, transforming soft clay into solid silver.
+                                Each piece begins with a quiet attention to form—a study of the curves, textures, and irregularities found in nature. Raquel's work centers on handcrafted, one-of-a-kind jewelry that refuses to conform to mass-produced perfection.
+                            </p>
+                            <p>
+                                Using 925 silver clay, she captures fingerprints, dust, and the natural wobble of the hand. Each piece is fired in a kiln at 1600°F, transforming soft clay into solid silver. This process preserves every mark, every imperfection—a record of making.
+                            </p>
+                            <p>
+                                Her pieces feature an eclectic array of materials: naturally occurring stones, fossils, and minerals alongside carefully selected human-made beads and pendants. Each combination is intentional, creating jewelry that carries both ancient memory and contemporary craft.
                             </p>
                             <div className="mt-8 aspect-video bg-[#EBEAE4] overflow-hidden border border-[#2B2B2B]/20 grayscale hover:grayscale-0 transition-all duration-700">
                                 <img src={IMAGES.people_working} className="w-full h-full object-cover" alt="Workshop Process" />
