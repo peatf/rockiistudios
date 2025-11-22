@@ -110,7 +110,8 @@ const PRODUCTS = [
     material: "Live Event",
     price: 100.00,
     desc: "Join us at The Greenhouse Studio in Silver Lake. Create your own unique piece.",
-    color: "#8FBC8F"
+    color: "#8FBC8F",
+    image: "https://www.dropbox.com/scl/fi/t59mh39tnbe92ftrj3gv1/admit-one.png?rlkey=qi0dpr4blxkdlvpcwchzfb5bh&st=7ehvpmaq&raw=1"
   }
 ];
 
